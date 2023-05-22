@@ -33,7 +33,7 @@ func main() {
 	handlers := handler.NewHandler(services)
 
 	server := new(diplomaWorks.Server)
-	if err := server.Run("8000", handlers.InitRoutes()); err != nil {
+	if err := server.Run(viper.GetString("8000"), handlers.InitRoutes()); err != nil {
 		log.Fatalf("error occured while running http server: %s", err.Error())
 	}
 }
