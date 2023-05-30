@@ -1,11 +1,11 @@
-package diplomaWorks
+package model
 
 type User struct {
 	Id          int    `json:"id"`
 	FirstName   string `json:"first_name"`
 	LastName    string `json:"last_name"`
-	Email       string `json:"email"`
-	Password    string `json:"password"`
+	Email       string `json:"email" binding:"required"`
+	Password    string `json:"password" binding:"required"`
 	PhoneNumber string `json:"phone_number"`
 	Role        string `json:"role"`
 }

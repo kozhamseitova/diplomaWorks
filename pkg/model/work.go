@@ -1,4 +1,4 @@
-package diplomaWorks
+package model
 
 type Work struct {
 	Id             int    `json:"id"`
