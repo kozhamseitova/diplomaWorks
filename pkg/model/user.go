@@ -1,13 +1,18 @@
 package model
 
 type User struct {
-	Id          int    `json:"id"`
+	Id          int    `json:"-" db:"id"`
 	FirstName   string `json:"first_name"`
 	LastName    string `json:"last_name"`
 	Email       string `json:"email" binding:"required"`
 	Password    string `json:"password" binding:"required"`
 	PhoneNumber string `json:"phone_number"`
 	Role        string `json:"role"`
+}
+
+type SignInInput struct {
+	Email    string `json:"email" binding:"required"`
+	Password string `json:"password" binding:"required"`
 }
 
 type Student struct {

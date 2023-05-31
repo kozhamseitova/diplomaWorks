@@ -24,3 +24,11 @@ func (r *AuthPostgres) CreateUser(user model.User) (int, error) {
 	}
 	return id, nil
 }
+
+func (r *AuthPostgres) GetUser(email, password string) (model.User, error) {
+	var user model.User
+	query := fmt.Sprintf("SELECT id FROM %s WHERE email=$1 AND password=$2", usersTable)
+	err := r.db.Get(&user, query, email, password)
+
+	return user, err
+}
