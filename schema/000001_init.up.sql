@@ -55,21 +55,34 @@ CREATE TABLE instructors
     FOREIGN KEY (user_id) REFERENCES users (id)
 );
 
+CREATE TABLE students
+(
+    id         serial       not null unique PRIMARY KEY,
+    user_id    INT          not null,
+    degree_id  INT          not null,
+    ep_id      INT          not null,
+    group_name VARCHAR(255) not null,
+    FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (degree_id) REFERENCES degrees (id),
+    FOREIGN KEY (ep_id) REFERENCES ep (id)
+);
+
 CREATE TABLE works
 (
     id              serial       not null unique PRIMARY KEY,
     created_at      DATE     not null,
-    title           VARCHAR(255) not null,
+    title           VARCHAR(255) not null unique,
     description     TEXT         not null,
     type_id         INT          not null,
     degree_id       INT          not null,
     instructor_id   INT          not null,
+    student_id   INT          not null,
     is_approved     BOOLEAN      not null,
-    request_numbers INT,
     progress_id     INT,
     FOREIGN KEY (type_id) REFERENCES types (id),
     FOREIGN KEY (degree_id) REFERENCES degrees (id),
     FOREIGN KEY (instructor_id) REFERENCES instructors (id),
+    FOREIGN KEY (student_id) REFERENCES students (id),
     FOREIGN KEY (progress_id) REFERENCES progress (id)
 );
 
@@ -81,19 +94,7 @@ CREATE TABLE works_eps
     FOREIGN KEY (ep_id) REFERENCES ep (id)
 );
 
-CREATE TABLE students
-(
-    id         serial       not null unique PRIMARY KEY,
-    user_id    INT          not null,
-    degree_id  INT          not null,
-    ep_id      INT          not null,
-    group_name VARCHAR(255) not null,
-    work_id    INT not null,
-    FOREIGN KEY (user_id) REFERENCES users (id),
-    FOREIGN KEY (work_id) REFERENCES works (id),
-    FOREIGN KEY (degree_id) REFERENCES degrees (id),
-    FOREIGN KEY (ep_id) REFERENCES ep (id)
-);
+
 
 CREATE TABLE requests
 (

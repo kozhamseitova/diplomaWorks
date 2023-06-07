@@ -41,6 +41,7 @@ func main() {
 	handlers := handler.NewHandler(services)
 
 	server := new(diplomaWorks.Server)
+
 	if err := server.Run(viper.GetString("port"), handlers.InitRoutes()); err != nil {
 		logrus.Fatalf("error occured while running http server: %s", err.Error())
 	}

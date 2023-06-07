@@ -1,6 +1,7 @@
 package handler
 
 import (
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/kozhamseitova/diplomaWorks/pkg/service"
 )
@@ -14,7 +15,12 @@ func NewHandler(services *service.Service) *Handler {
 }
 
 func (h *Handler) InitRoutes() *gin.Engine {
-	router := gin.New()
+	router := gin.Default()
+	config := cors.DefaultConfig()
+	config.AllowOrigins = []string{"http://localhost:3000"}
+	config.AllowHeaders = []string{"Origin", "Content-Length", "Content-Type", "User-Agent", "Referrer", "Host", "Token", "Authorization"}
+
+	router.Use(cors.New(config))
 
 	auth := router.Group("/auth")
 	{
@@ -26,15 +32,15 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	{
 		works := api.Group("/works")
 		{
-			works.POST("/", h.createWork)
-			works.GET("/", h.signUp)
+			works.POST("/", h.onlyInstructor, h.createWork)
+			works.GET("/", h.getAllWorks)
 			works.GET("/:id", h.signUp)
 			works.PUT("/:id", h.signUp)
 			works.DELETE("/:id", h.signUp)
 
 			requests := works.Group("/requests")
 			{
-				requests.POST("/", h.signUp)
+				requests.POST("/", h.createRequest)
 				requests.GET("/", h.signUp)
 				requests.GET("/:requests_id", h.signUp)
 				requests.PUT("/:requests_id", h.signUp)
