@@ -25,26 +25,51 @@ func (h *Handler) InitRoutes() *gin.Engine {
 	auth := router.Group("/auth")
 	{
 		auth.POST("/sign-in", h.signIn)
-		auth.POST("/sign-up", h.signUp)
 	}
 
 	api := router.Group("/api", h.userIdentity)
 	{
 		works := api.Group("/works")
 		{
-			works.POST("/", h.onlyInstructor, h.createWork)
 			works.GET("/", h.getAllWorks)
-			works.GET("/:id", h.signUp)
-			works.PUT("/:id", h.signUp)
-			works.DELETE("/:id", h.signUp)
+			works.GET("/:id", h.getWorkById)
+		}
 
-			requests := works.Group("/requests")
+		admin := api.Group("/admin", h.onlyAdmin)
+		{
+			admin.POST("/sign-up", h.onlyAdmin, h.signUp)
+			adminWorks := admin.Group("/works")
+			{
+				adminWorks.GET("/", h.getAllWorksForAdmin)
+				adminWorks.PUT("/:id", h.approveWork)
+			}
+		}
+
+		students := api.Group("/students/:student_id", h.onlyStudent)
+		{
+			requests := students.Group("/requests")
 			{
 				requests.POST("/", h.createRequest)
-				requests.GET("/", h.signUp)
-				requests.GET("/:requests_id", h.signUp)
-				requests.PUT("/:requests_id", h.signUp)
-				requests.DELETE("/:requests_id", h.signUp)
+				requests.GET("/", h.getAllRequestsByStudentId)
+				requests.PUT("/:requests_id", h.closeRequest)
+				requests.DELETE("/:requests_id", h.deleteRequest)
+			}
+		}
+
+		instructors := api.Group("/instructors/:instructor_id", h.onlyInstructor)
+		{
+			instructorsWorks := instructors.Group("/works")
+			{
+				instructorsWorks.POST("/", h.createWork)
+				instructorsWorks.GET("/", h.getWorksByInstructorId)
+				instructorsWorks.PUT("/:id", h.updateWork)
+				instructorsWorks.DELETE("/:id", h.deleteWork)
+			}
+
+			requests := instructors.Group("/requests")
+			{
+				requests.GET("/:work_id", h.getAllRequestsByWorkId)
+				requests.PUT("/:requests_id", h.changeRequestStatus)
 			}
 		}
 

@@ -83,3 +83,19 @@ func (h *Handler) onlyStudent(c *gin.Context) {
 	}
 
 }
+
+func (h *Handler) onlyAdmin(c *gin.Context) {
+	role, ok := c.Get(roleCtx)
+	if !ok {
+		newErrorResponse(c, http.StatusForbidden, "user role not found")
+	}
+
+	roleString, ok := role.(string)
+	if !ok {
+		newErrorResponse(c, http.StatusForbidden, "invalid type user role")
+	}
+	if roleString != "admin" {
+		newErrorResponse(c, http.StatusForbidden, "permission denied")
+	}
+
+}

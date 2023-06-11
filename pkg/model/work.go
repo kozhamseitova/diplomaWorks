@@ -9,6 +9,20 @@ type WorkInput struct {
 	DegreeId     int    `json:"degree_id" db:"degree_id"`
 	FacultyId    int    `json:"faculty_id" db:"faculty_id"`
 	InstructorId int    `json:"instructor_id" db:"instructor_id"`
+	IsApproved   bool   `json:"is_approved" db:"is_approved"`
+	ProgressId   int    `json:"progress_id" db:"progress_id"`
+	WorkEp       []int  `json:"work_ep" db:"work_ep"`
+}
+
+type WorkUpdate struct {
+	Id           int    `json:"id" db:"id"`
+	CreatedAt    string `json:"created_at" db:"created_at"`
+	Title        string `json:"title" db:"title"`
+	Description  string `json:"description" db:"description"`
+	TypeId       int    `json:"type_id" db:"type_id"`
+	DegreeId     int    `json:"degree_id" db:"degree_id"`
+	FacultyId    int    `json:"faculty_id" db:"faculty_id"`
+	InstructorId int    `json:"instructor_id" db:"instructor_id"`
 	StudentId    int    `json:"student_id" db:"student_id"`
 	IsApproved   bool   `json:"is_approved" db:"is_approved"`
 	ProgressId   int    `json:"progress_id" db:"progress_id"`
@@ -24,6 +38,18 @@ type Work struct {
 	Faculty     []Faculty  `json:"faculty" db:"faculty"`
 	Instructor  Instructor `json:"instructor" db:"instructor"`
 	IsApproved  bool       `json:"is_approved" db:"is_approved"`
+}
+
+type WorkInstructor struct {
+	Id          int       `json:"id" db:"id"`
+	Title       string    `json:"title" db:"title" binding:"required"`
+	Description string    `json:"description" db:"description"`
+	Type        Type      `json:"type" db:"type"`
+	Degree      Degree    `json:"degree" db:"degree"`
+	EP          []EP      `json:"ep" db:"ep"`
+	Faculty     []Faculty `json:"faculty" db:"faculty"`
+	IsApproved  bool      `json:"is_approved" db:"is_approved"`
+	Progress    Progress  `json:"progress" db:"progress"`
 }
 
 type Instructor struct {
@@ -49,6 +75,12 @@ type RequestInput struct {
 	StudentId   int    `json:"student_id"`
 	Description string `json:"description"`
 }
+
+type RequestStatus struct {
+	Id       int `json:"id"`
+	StatusId int `json:"status_id"`
+}
+
 type WorkRequest struct {
 	Id          int    `json:"id"`
 	Title       string `json:"title"`
@@ -78,17 +110,6 @@ type Type struct {
 type EP struct {
 	Id   int    `json:"id"`
 	Name string `json:"name"`
-}
-
-type DiplomaFaculties struct {
-	WorkId    int `json:"work_id"`
-	FacultyId int `json:"faculty_id"`
-}
-
-type DiplomaFacultiesEP struct {
-	WorkId    int `json:"work_id"`
-	FacultyId int `json:"faculty_id"`
-	EPId      int `json:"ep_id"`
 }
 
 type Status struct {
